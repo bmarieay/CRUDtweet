@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HOME</title>
+    <title>All Tweets</title>
 </head>
 <body>
-    
+    <h1>List of all Tweets</h1>
+    <ul>
+        <% for(let tweet of tweets){ %>
+            <li><%= tweet.tweet %>  - <b><%= tweet.username %> </b></li>
+        <% } %>
+    </ul>
 </body>
 </html>

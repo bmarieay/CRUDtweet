@@ -5,6 +5,8 @@ const { v4: uuid } = require('uuid');
 uuid();
 const port = 3000;
 
+// app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 //configure ejs
 app.set('view engine', 'ejs');
@@ -40,13 +42,24 @@ const tweetsData = [
 app.get('/', (req, res) => { //homepage
     res.render('tweets/home')
 })
-
+//DISPLAY ALL TWEETS
 app.get('/tweets', (req, res) => {
     //pass the array of objects
     res.render('tweets/index', {tweets : tweetsData})
-
+})
+//DISPLAY A FORM TO CREATE A NEW TWEET
+app.get('/tweets/new', (req, res) => {
+    res.render('tweets/create');
 })
 
+app.post('/tweets', (req, res) => {
+    //destructure the payload
+    const {username, tweet} = req.body;
+    //push to the data with a new id
+    tweetsData.push({id : uuid(), username, tweet});
+    //redirect to /tweets
+    res.redirect('/tweets');
+})
 
 
 

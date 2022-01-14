@@ -10,5 +10,7 @@
     <h1>Viewing <%=  tweet.username  %>'s tweet</h1>
     <p>Tweet - <%= tweet.tweet %></p>
     <p>id: <%= tweet.id %></p>
+    <a href="/tweets">Go back to all tweets</a>
+    <a href="/tweets/<%= tweet.id %>/edit">Edit</a>
 </body>
 </html>

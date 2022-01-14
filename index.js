@@ -1,9 +1,13 @@
 const express = require("express")
 const app = express();
 const path = require("path")
-const { v4: uuid } = require('uuid');
+const { v4: uuid } = require("uuid");
+const methodOverride = require("method-override");
 uuid();
 const port = 3000;
+
+//method overide using query value
+app.use(methodOverride('_method'));
 
 // app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
@@ -36,8 +40,6 @@ const tweetsData = [
     }
 ]
 
-
-
 //routes//
 app.get('/', (req, res) => { //homepage
     res.render('tweets/home')
@@ -62,11 +64,27 @@ app.post('/tweets', (req, res) => {
     //redirect to /tweets
     res.redirect('/tweets');
 })
-
+//VIEW A SINGLE TWEET
 app.get('/tweets/:id', (req, res) => {
+    //get the tweet of the matching id from the param
     const {id} = req.params;
     const matchingTweet = tweetsData.find(tweet => tweet.id === id);
     res.render('tweets/show', {tweet : matchingTweet});
+})
+//EDIT A TWEET
+app.get('/tweets/:id/edit', (req, res) => {
+    const {id} = req.params;
+    const matchingTweet = tweetsData.find(tweet => tweet.id === id);
+    res.render('tweets/edit', {tweet : matchingTweet});
+})
+
+app.patch('/tweets/:id', (req, res) => {
+    const {id} = req.params;
+    const matchingTweet = tweetsData.find(tweet => tweet.id === id);
+    //replace the tweet with the tweet payload
+    matchingTweet.tweet = req.body.tweet;
+    //redirect the user to all tweets
+    res.redirect('/tweets')
 })
 
 

@@ -17,7 +17,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
 //array of tweets to mimic a database
-const tweetsData = [
+let tweetsData = [
     {
         id: uuid(),
         username: 'IamMarie',
@@ -77,7 +77,7 @@ app.get('/tweets/:id/edit', (req, res) => {
     const matchingTweet = tweetsData.find(tweet => tweet.id === id);
     res.render('tweets/edit', {tweet : matchingTweet});
 })
-
+//UPDATE THE SINGLE TWEET IN SERVER
 app.patch('/tweets/:id', (req, res) => {
     const {id} = req.params;
     const matchingTweet = tweetsData.find(tweet => tweet.id === id);
@@ -86,9 +86,12 @@ app.patch('/tweets/:id', (req, res) => {
     //redirect the user to all tweets
     res.redirect('/tweets')
 })
-
-
-
+//DELETE THE TWEET FROM THE SERVER
+app.delete('/tweets/:id', (req, res) => {
+    const {id} = req.params;
+    tweetsData = tweetsData.filter(tweet => tweet.id !== id);
+    res.redirect('/tweets');
+})
 
 //=====
 app.listen(3000, (req, res) => {

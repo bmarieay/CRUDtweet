@@ -12,5 +12,8 @@
     <p>id: <%= tweet.id %></p>
     <a href="/tweets">Go back to all tweets</a>
     <a href="/tweets/<%= tweet.id %>/edit">Edit</a>
+    <form action="/tweets/<%= tweet.id %>?_method=DELETE" method="POST">
+        <button>Delete</button>
+    </form>
 </body>
 </html>

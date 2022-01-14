@@ -38,20 +38,22 @@ const tweetsData = [
 
 
 
-//routes
+//routes//
 app.get('/', (req, res) => { //homepage
     res.render('tweets/home')
 })
+
 //DISPLAY ALL TWEETS
 app.get('/tweets', (req, res) => {
     //pass the array of objects
     res.render('tweets/index', {tweets : tweetsData})
 })
+
 //DISPLAY A FORM TO CREATE A NEW TWEET
 app.get('/tweets/new', (req, res) => {
     res.render('tweets/create');
 })
-
+//ADD A NEW TWEET TO THE SERVER
 app.post('/tweets', (req, res) => {
     //destructure the payload
     const {username, tweet} = req.body;
@@ -60,6 +62,13 @@ app.post('/tweets', (req, res) => {
     //redirect to /tweets
     res.redirect('/tweets');
 })
+
+app.get('/tweets/:id', (req, res) => {
+    const {id} = req.params;
+    const matchingTweet = tweetsData.find(tweet => tweet.id === id);
+    res.render('tweets/show', {tweet : matchingTweet});
+})
+
 
 
 

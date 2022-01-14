@@ -10,7 +10,10 @@
     <h1>List of all Tweets</h1>
     <ul>
         <% for(let tweet of tweets){ %>
-            <li><%= tweet.tweet %>  - <b><%= tweet.username %> </b></li>
+            <li>
+                <%= tweet.tweet %>  - <b><%= tweet.username %> </b>
+                <a href="/tweets/<%= tweet.id %>">View</a>
+            </li>
         <% } %>
     </ul>
 </body>

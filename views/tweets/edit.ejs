@@ -9,14 +9,16 @@
     <title>Edit Tweet</title>
 </head>
 <body>
-    <h1>Editing <%= tweet.username %>'s tweet</h1>
-    <form action="/tweets/<%=  tweet.id  %>?_method=PATCH" method="POST">
-        <textarea name="tweet" id="" cols="30" rows="5">
-            <%= tweet.tweet  %>
-        </textarea>
-        <br>
-        <button>Submit</button>
-    </form>
-    <a href="/tweets/<%= tweet.id  %>">Cancel</a>
-</body>
-</html>
+    <%- include('partials/nav') %>
+        <main class="container">
+            <h1>Editing <%= tweet.username %>'s tweet</h1>
+            <form action="/tweets/<%=  tweet.id  %>?_method=PATCH" method="POST">
+                <textarea name="tweet" id="" cols="30" rows="5">
+                    <%= tweet.tweet  %>
+                </textarea>
+                <br>
+                <button>Submit</button>
+            </form>
+            <a href="/tweets/<%= tweet.id  %>">Cancel</a>
+        </main>
+    <%- include('partials/footer') %>

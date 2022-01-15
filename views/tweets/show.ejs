@@ -9,13 +9,15 @@
     <title>Viewing tweet</title>
 </head>
 <body>
-    <h1>Viewing <%=  tweet.username  %>'s tweet</h1>
-    <p>Tweet - <%= tweet.tweet %></p>
-    <p>id: <%= tweet.id %></p>
-    <a href="/tweets">Go back to all tweets</a>
-    <a href="/tweets/<%= tweet.id %>/edit">Edit</a>
-    <form action="/tweets/<%= tweet.id %>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
-</body>
-</html>
+    <%- include('partials/nav') %>
+        <main class="container">
+            <h1>Viewing <%=  tweet.username  %>'s tweet</h1>
+            <p>Tweet - <%= tweet.tweet %></p>
+            <p>id: <%= tweet.id %></p>
+            <a href="/tweets">Go back to all tweets</a>
+            <a href="/tweets/<%= tweet.id %>/edit">Edit</a>
+            <form action="/tweets/<%= tweet.id %>?_method=DELETE" method="POST">
+                <button>Delete</button>
+            </form>
+    </main>
+    <%- include('partials/footer') %>

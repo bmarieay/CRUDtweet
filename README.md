@@ -9,7 +9,7 @@ templates, partials, and static files along with <b>Node.js and Express</b>
 
 <hr>
 
-To run this on your local machine:
+## To run this on your local machine:
 1.  Make sure you have Node.js downloaded in your local machine before
 downloading the code
 2.  Go to the correct path in your terminal and type `npm install` to
@@ -21,7 +21,7 @@ install all the dependencies listed in the <b>package.json</b> file
 
 <hr>
 
-This is a simple CRUD demo built with:
+## This is a simple CRUD demo built with:
 
 1.  <b>Extended Javascript (EJS)</b> - I used this to create a
 template for each tweets when viewing it and also to render these
@@ -46,7 +46,14 @@ forms.
 
 <hr>
 
-Summary of the Restful Routes:
+## Previews: 
+
+<img src="preview-img/alltweets.png" width="800">
+<img src="preview-img/viewtweet.png" width="800">
+<img src="preview-img/edittweet.png" width="800">
+<img src="preview-img/createtweet.png" width="800">
+
+## Summary of the Restful Routes:
 1.  <b>GET /tweets</b> - display all the tweets
 2.  <b>GET /tweets/new</b> - displays a form to create a new tweet
 3.  <b>POST /tweets</b> - creates a new comment on the server
@@ -56,7 +63,4 @@ Summary of the Restful Routes:
 
 &nbsp;
 &nbsp;
-
 <hr>
-
-

@@ -2,21 +2,58 @@
     box-sizing: inherit;
 }
 
+:root{
+    --fs-small: 1.25rem;
+    --fs-regular: 1.5rem;
+    --fs-medium: 1.75rem;
+    --fs-large: 2rem;
+    --fs-largest: 2.5rem;
+
+    --prmry-clr: #1d3557;
+    --scndry-clr: #457b9d;
+    --btn-clr: #a8dadc;
+    --light-clr: #f1faee;
+    --accent-clr: #e63946;
+
+    --gap: 10px;
+}
+
 html {
     box-sizing: border-box;
     font-size: 62.5%;
 }
 
 body{
-    font-size: 1.5rem;
+    font-size: var(--fs-regular);
     margin: 0;
     font-family:  'Source Sans Pro', sans-serif;
-    background-color: #457b9d;
-    color:#f1faee;
+    background-color: var(--scndry-clr);
+    color: var(--light-clr);
+}
+
+#nav{
+    padding: 1.5rem;
+    font-size: var(--fs-large);
+    font-weight: 700;
+    background-color: var(--prmry-clr);
+    color: var(--light-clr);
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+}
+
+.nav__item{
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+    padding-bottom: 2rem;
+}
+
+.nav__item__list + .nav__item__list{
+    margin-top: 15px;
 }
 
 h1{
-    font-size: 2.5rem;
+    font-size: var(--fs-largest);
     margin-bottom: 1em;
     margin-top: 0;
 }
@@ -31,30 +68,17 @@ a{
     color: inherit;
 }
 
-footer{
-    text-align: center;
-    font-size: 2rem;
-    font-weight: 400;
-    font-style: italic;
-    padding: 2rem 0;
-}
-
 ul {
     list-style-type: none;
     padding: 0;
 }
 
-
-.tweet-container{
-    margin-bottom: 3rem;
-}
-
-.btn:hover{
-    -webkit-transform: scale(1.1);
-    -moz-transform:scale(1.1);
-    -o-transform:skew(1.1);
-    -ms-transform:scale(1.1);
-    transform: scale(1.1);
+footer{
+    text-align: center;
+    font-size: var(--fs-largest);
+    font-weight: 400;
+    font-style: italic;
+    padding: 2rem 0;
 }
 
 .tweet-container *{
@@ -69,61 +93,75 @@ ul {
     display: block;
 }
 
-#nav{
-    padding: 1.5rem;
-    font-size: 2rem;
-    font-weight: 700;
-    background-color: #1d3557;
-    color: #f1faee;
-    letter-spacing: 2px;
-    margin-bottom: 2rem;
-}
-
-
 .container{
-    /* border: 2px solid white; */
     width: 80%;
     max-width: 750px;
     margin: 0 auto;
 }
 
+button{
+    border: none;
+}
+
 .btn{
-    color: #1d3557;
+    color: var(--prmry-clr);
     font-weight: 700;
     text-align: center;
-    border-radius: 10px;
+    border-radius: var(--gap);
     padding: .5em 1.5em;
-    background-color: #a8dadc;
+    background-color: var(--btn-clr);
     max-width: max-content;
 }
 
 .btn-small{
-    font-size: 1.25rem;
-    margin-left: 10px;
+    font-size: var(--fs-small);
+    margin-left: var(--gap);
     display: inline-block;
 }
 
 .btn-med{
     display: block;
-    font-size: 1.75rem;
+    font-size: var(--fs-medium);
     margin: 0 auto;
 }
 
-.nav__item{
-    /* border: 2px solid white; */
-    text-align: center;
-    width: 80%;
-    margin: 0 auto;
-    padding-bottom: 2rem;
+/* .btn-small:nth-of-type(1){
+    margin-left: 0;
+} */
+
+.btn:hover{
+    -webkit-transform: scale(1.1);
+    -moz-transform:scale(1.1);
+    -o-transform:skew(1.1);
+    -ms-transform:scale(1.1);
+    transform: scale(1.1);
 }
 
-.nav__item__list + .nav__item__list{
-    margin-top: 15px;
+#deleteButton{
+    background-color: var(--accent-clr);
+    color: var(--light-clr);
+    margin-top: 1rem;
+}
+
+#cancelButton{
+    margin-top: var(--gap);
 }
 
 @media(min-width: 520px){
     #toggler{
         display: none;
+    }
+
+    #deleteForm{
+        float: right;
+    }
+
+    #nav .container{
+        max-width: 600px;
+    }
+
+    .tweet-container{
+        margin-bottom: 3rem;
     }
 
     .nav__item{
@@ -136,16 +174,21 @@ ul {
 
     .nav__item__list{
         display: inline-block;
-        /* flex-basis: 28%; */
     }
-
+    
     .nav__item__list + .nav__item__list{
         margin-top: 0;
-        /* margin-left: 10px; */
     }
+}
 
-    #nav .container{
-        max-width: 600px;
+@media(min-width: 750px){
+    :root{
+        --fs-small: 1.5rem;
+        --fs-regular: 1.75rem;
+        --fs-medium: 2rem;
+        --fs-large: 2.5rem;
+        --fs-largest: 3rem;
+
+        --gap: 15px;
     }
-
 }

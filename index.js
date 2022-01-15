@@ -52,13 +52,14 @@ app.get('/', (req, res) => { //homepage
 //DISPLAY ALL TWEETS
 app.get('/tweets', (req, res) => {
     //pass the array of objects
-    res.render('tweets/index', {tweets : tweetsData})
+    res.render('tweets/index', {tweets : tweetsData, title: "All Tweets"})
 })
 
 //DISPLAY A FORM TO CREATE A NEW TWEET
 app.get('/tweets/new', (req, res) => {
-    res.render('tweets/create');
+    res.render('tweets/create', {title: "New Tweet"});
 })
+
 //ADD A NEW TWEET TO THE SERVER
 app.post('/tweets', (req, res) => {
     //destructure the payload
@@ -68,19 +69,22 @@ app.post('/tweets', (req, res) => {
     //redirect to /tweets
     res.redirect('/tweets');
 })
+
 //VIEW A SINGLE TWEET
 app.get('/tweets/:id', (req, res) => {
     //get the tweet of the matching id from the param
     const {id} = req.params;
     const matchingTweet = tweetsData.find(tweet => tweet.id === id);
-    res.render('tweets/show', {tweet : matchingTweet});
+    res.render('tweets/show', {tweet : matchingTweet, title: `${matchingTweet.username}'s tweet`});
 })
+
 //EDIT A TWEET
 app.get('/tweets/:id/edit', (req, res) => {
     const {id} = req.params;
     const matchingTweet = tweetsData.find(tweet => tweet.id === id);
-    res.render('tweets/edit', {tweet : matchingTweet});
+    res.render('tweets/edit', {tweet : matchingTweet,  title: `Edit ${matchingTweet.username}'s tweet`});
 })
+
 //UPDATE THE SINGLE TWEET IN SERVER
 app.patch('/tweets/:id', (req, res) => {
     const {id} = req.params;
@@ -90,6 +94,7 @@ app.patch('/tweets/:id', (req, res) => {
     //redirect the user to all tweets
     res.redirect('/tweets')
 })
+
 //DELETE THE TWEET FROM THE SERVER
 app.delete('/tweets/:id', (req, res) => {
     const {id} = req.params;

@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/singlestyle.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,200&display=swap" rel="stylesheet">
     <title>Edit Tweet</title>
 </head>
@@ -17,8 +18,8 @@
                     <%= tweet.tweet  %>
                 </textarea>
                 <br>
-                <button>Submit</button>
+                <button class="btn btn-small">Submit</button>
             </form>
-            <a href="/tweets/<%= tweet.id  %>">Cancel</a>
+            <a href="/tweets/<%= tweet.id  %>" class="btn btn-small" id="cancelButton">Cancel</a>
         </main>
     <%- include('partials/footer') %>

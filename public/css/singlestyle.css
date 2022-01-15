@@ -1,0 +1,22 @@
+button{
+    border: none;
+}
+#deleteButton{
+    background-color: #e63946;
+    color: #f1faee;
+    margin-top: 1rem;
+}
+
+#cancelButton{
+    margin-top: 10px;
+}
+
+.btn-small:nth-of-type(1){
+    margin-left: 0;
+}
+
+@media(min-width: 520px){
+    #deleteForm{
+        float: right;
+    }
+}

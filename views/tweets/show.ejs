@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/singlestyle.css">
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,200&display=swap" rel="stylesheet">
     <title>Viewing tweet</title>
 </head>
@@ -14,10 +15,10 @@
             <h1>Viewing <%=  tweet.username  %>'s tweet</h1>
             <p>Tweet - <%= tweet.tweet %></p>
             <p>id: <%= tweet.id %></p>
-            <a href="/tweets">Go back to all tweets</a>
-            <a href="/tweets/<%= tweet.id %>/edit">Edit</a>
-            <form action="/tweets/<%= tweet.id %>?_method=DELETE" method="POST">
-                <button>Delete</button>
+            <a href="/tweets" class="btn btn-small">Go back to all tweets</a>
+            <a href="/tweets/<%= tweet.id %>/edit" class="btn btn-small">Edit</a>
+            <form action="/tweets/<%= tweet.id %>?_method=DELETE" method="POST" id="deleteForm">
+                <button id="deleteButton" class="btn btn-small">Delete</button>
             </form>
     </main>
     <%- include('partials/footer') %>

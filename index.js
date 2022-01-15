@@ -6,6 +6,10 @@ const methodOverride = require("method-override");
 uuid();
 const port = 3000;
 
+//serve static files from public directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 //method overide using query value
 app.use(methodOverride('_method'));
 

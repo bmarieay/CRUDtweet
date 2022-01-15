@@ -4,17 +4,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Tweets</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,200&display=swap" rel="stylesheet">
+    <title>HOME PAGE</title>
 </head>
 <body>
-    <h1>List of all Tweets</h1>
-    <ul>
-        <% for(let tweet of tweets){ %>
-            <li>
-                <%= tweet.tweet %>  - <b><%= tweet.username %> </b>
-                <a href="/tweets/<%= tweet.id %>">View</a>
-            </li>
-        <% } %>
-    </ul>
+    <nav id="nav">
+        <label id="toggler" for="hamburger">&#9776;</label>
+        <div class="container">
+            <input class="hide" type="checkbox" id="hamburger"/>
+            <ul class="nav__item hide">
+                <li class="nav__item__list"><a href="/">HOME</a></li>
+                <li class="nav__item__list"><a href="/tweets">ALL TWEETS</a></li>
+                <li class="nav__item__list"><a href="/tweets/new">NEW TWEET</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main class="container">
+        <h1>List of all Tweets</h1>
+        <ul class="tweet-container">
+            <% for(let tweet of tweets){ %>
+                <li>
+                    <%= tweet.tweet %>  - <b><%= tweet.username %> </b>
+                    <a href="/tweets/<%= tweet.id %>" class="btn btn-small">View</a>
+                </li>
+            <% } %>
+        </ul>
+        <a href="/tweets/new" class="btn btn-med">Create a new tweet</a>
+    </main>
+    <footer>
+        <p>A simple CRUD demo</p>
+    </footer>
+    <script src="/js/app.js"></script>
 </body>
 </html>

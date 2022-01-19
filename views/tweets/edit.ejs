@@ -4,11 +4,11 @@
             <h1>Editing <%= tweet.username %>'s tweet</h1>
             <form action="/tweets/<%=  tweet.id  %>?_method=PATCH" method="POST">
                 <textarea name="tweet" id="" cols="30" rows="5">
-                    <%= tweet.tweet  %>
+                    <%= tweet.tweetText  %>
                 </textarea>
                 <br>
                 <button class="btn btn-small">Submit</button>
             </form>
-            <a href="/tweets/<%= tweet.id  %>" class="btn btn-small" id="cancelButton">Cancel</a>
+            <a href="/tweets/<%= tweet._id  %>" class="btn btn-small" id="cancelButton">Cancel</a>
         </main>
 <%- include('partials/footer') %>

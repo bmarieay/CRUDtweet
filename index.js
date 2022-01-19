@@ -57,28 +57,29 @@ app.get('/tweets/new', (req, res) => {
 })
 
 //ADD A NEW TWEET TO THE SERVER
-app.post('/tweets', (req, res) => {
+app.post('/tweets', async (req, res) => {
     //destructure the payload
-    const {username, tweet} = req.body;
+    // const {username, tweet} = req.body;
+    const tweet = new Tweet(req.body);
+    await tweet.save();
     //push to the data with a new id
-    tweetsData.push({id : uuid(), username, tweet});
+    // tweetsData.push({id : uuid(), username, tweet});
     //redirect to /tweets
     res.redirect('/tweets');
 })
 
 //VIEW A SINGLE TWEET
-app.get('/tweets/:id', (req, res) => {
+app.get('/tweets/:id', async (req, res) => {
     //get the tweet of the matching id from the param
-    const {id} = req.params;
-    const matchingTweet = tweetsData.find(tweet => tweet.id === id);
-    res.render('tweets/show', {tweet : matchingTweet, title: `${matchingTweet.username}'s tweet`});
+    const tweet = await Tweet.findById(req.params.id);
+    console.log(tweet)
+    res.render('tweets/show', {tweet, title: `${tweet.username}'s tweet`});
 })
 
 //EDIT A TWEET
-app.get('/tweets/:id/edit', (req, res) => {
-    const {id} = req.params;
-    const matchingTweet = tweetsData.find(tweet => tweet.id === id);
-    res.render('tweets/edit', {tweet : matchingTweet,  title: `Edit ${matchingTweet.username}'s tweet`});
+app.get('/tweets/:id/edit', async (req, res) => {
+    const tweet = await Tweet.findById(req.params.id);
+    res.render('tweets/edit', {tweet,  title: `Edit ${tweet.username}'s tweet`});
 })
 
 //UPDATE THE SINGLE TWEET IN SERVER

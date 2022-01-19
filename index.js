@@ -42,7 +42,7 @@ app.set('views', path.join(__dirname, 'views'))
 
 //routes//
 app.get('/', (req, res) => { //homepage
-    res.render('tweets/home')
+    res.render('tweets/home', {title: "DEFAULT PAGE"})
 })
 
 //DISPLAY ALL TWEETS
@@ -59,13 +59,8 @@ app.get('/tweets/new', (req, res) => {
 
 //ADD A NEW TWEET TO THE SERVER
 app.post('/tweets', async (req, res) => {
-    //destructure the payload
-    // const {username, tweet} = req.body;
     const tweet = new Tweet(req.body);
     await tweet.save();
-    //push to the data with a new id
-    // tweetsData.push({id : uuid(), username, tweet});
-    //redirect to /tweets
     res.redirect('/tweets');
 })
 
@@ -73,7 +68,6 @@ app.post('/tweets', async (req, res) => {
 app.get('/tweets/:id', async (req, res) => {
     //get the tweet of the matching id from the param
     const tweet = await Tweet.findById(req.params.id);
-    console.log(tweet)
     res.render('tweets/show', {tweet, title: `${tweet.username}'s tweet`});
 })
 
@@ -91,9 +85,9 @@ app.patch('/tweets/:id', async (req, res) => {
 })
 
 //DELETE THE TWEET FROM THE SERVER
-app.delete('/tweets/:id', (req, res) => {
+app.delete('/tweets/:id', async (req, res) => {
     const {id} = req.params;
-    tweetsData = tweetsData.filter(tweet => tweet.id !== id);
+    await Tweet.findByIdAndDelete(id);
     res.redirect('/tweets');
 })
 

@@ -5,6 +5,24 @@ const { v4: uuid } = require("uuid");
 const methodOverride = require("method-override");
 uuid();
 const port = 3000;
+const mongoose = require("mongoose");
+//initial connection
+mongoose.connect('mongodb://localhost:27017/CrudTweet')
+    .then(() => {
+        console.log("Connection open!")
+    })
+    .catch((error) => {
+        console.log("Oh no error");
+        console.log(error);
+    })
+
+
+//after initial connection
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("Database connected");
+});
 
 //serve static files from public directory
 app.use(express.static(path.join(__dirname, 'public')));

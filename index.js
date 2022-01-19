@@ -39,39 +39,16 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
-//array of tweets to mimic a database
-let tweetsData = [
-    {
-        id: uuid(),
-        username: 'IamMarie',
-        tweet:  'just woke up!'
-    },
-    {
-        id: uuid(),
-        username: 'bob',
-        tweet:  'Cant wait!'
-    },
-    {
-        id: uuid(),
-        username: 'Dan123',
-        tweet:  'I passed!'
-    },
-    {
-        id: uuid(),
-        username: 'mynameis',
-        tweet:  'It is so cold'
-    }
-]
-
 //routes//
 app.get('/', (req, res) => { //homepage
     res.render('tweets/home')
 })
 
 //DISPLAY ALL TWEETS
-app.get('/tweets', (req, res) => {
+app.get('/tweets', async (req, res) => {
     //pass the array of objects
-    res.render('tweets/index', {tweets : tweetsData, title: "All Tweets"})
+    const tweets = await Tweet.find({});
+    res.render('tweets/index', {tweets, title: "All Tweets"})
 })
 
 //DISPLAY A FORM TO CREATE A NEW TWEET

@@ -2,8 +2,8 @@
     <%- include('partials/nav') %>
         <main class="container">
             <h1>Editing <%= tweet.username %>'s tweet</h1>
-            <form action="/tweets/<%=  tweet.id  %>?_method=PATCH" method="POST">
-                <textarea name="tweet" id="" cols="30" rows="5">
+            <form action="/tweets/<%=  tweet._id  %>?_method=PATCH" method="POST">
+                <textarea name="tweetText" id="" cols="30" rows="5">
                     <%= tweet.tweetText  %>
                 </textarea>
                 <br>

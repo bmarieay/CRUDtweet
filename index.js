@@ -23,7 +23,8 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
-const Tweet = require('./models/tweet')
+const Tweet = require('./models/tweet');
+const tweet = require("./models/tweet");
 
 //serve static files from public directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -83,12 +84,9 @@ app.get('/tweets/:id/edit', async (req, res) => {
 })
 
 //UPDATE THE SINGLE TWEET IN SERVER
-app.patch('/tweets/:id', (req, res) => {
+app.patch('/tweets/:id', async (req, res) => {
     const {id} = req.params;
-    const matchingTweet = tweetsData.find(tweet => tweet.id === id);
-    //replace the tweet with the tweet payload
-    matchingTweet.tweet = req.body.tweet;
-    //redirect the user to all tweets
+    const tweet = await Tweet.findByIdAndUpdate(id, {...req.body});
     res.redirect('/tweets')
 })
 

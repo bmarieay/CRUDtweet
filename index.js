@@ -16,13 +16,14 @@ mongoose.connect('mongodb://localhost:27017/CrudTweet')
         console.log(error);
     })
 
-
 //after initial connection
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
     console.log("Database connected");
 });
+
+const Tweet = require('./models/tweet')
 
 //serve static files from public directory
 app.use(express.static(path.join(__dirname, 'public')));

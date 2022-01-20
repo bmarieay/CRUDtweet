@@ -72,11 +72,11 @@ app.post('/tweets', async (req, res) => {
 })
 
 //VIEW A SINGLE TWEET
-app.get('/tweets/:id', (req, res) => {
+app.get('/tweets/:id', async (req, res) => {
     //get the tweet of the matching id from the param
     const {id} = req.params;
-    const matchingTweet = tweetsData.find(tweet => tweet.id === id);
-    res.render('tweets/show', {tweet : matchingTweet, title: `${matchingTweet.username}'s tweet`});
+    const tweet = await Tweet.findById(id);
+    res.render('tweets/show', {tweet, title: `${tweet.username}'s tweet`});
 })
 
 //EDIT A TWEET

@@ -2,8 +2,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const TweetSchema = new Schema({
-    username: String,
-    tweetText: String
+    username: {
+        type: String,
+        required: [true, 'Username is required' ]
+    },
+    tweetText: {
+        type: String,
+        required: [true, 'Cannot submit a blank tweet']
+    }
 })
 
 const Tweet = mongoose.model('Tweet', TweetSchema);

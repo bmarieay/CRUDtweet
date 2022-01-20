@@ -45,18 +45,21 @@ app.get('/', (req, res) => { //homepage
     res.render('tweets/home', {title: "DEFAULT"})
 })
 
-//DISPLAY ALL TWEETS
-app.get('/tweets', async (req, res, next) => {
-    try {
-        const tweets = await Tweet.find({});
-        if(!tweets){
-            throw new AppError('Something went wrong displaying the tweets', 404)
-        }
-        res.render('tweets/index', {tweets, title: "All Tweets"})
-    } catch (error) {
-        next(e)
+function wrapAsync(fn){
+    return function(req, res, next){
+        fn(req, res, next).catch(e => next(e));//catch errors thrown by mongoose or by AppError
     }
-})
+}
+
+
+//DISPLAY ALL TWEETS
+app.get('/tweets', wrapAsync(async (req, res, next) => {
+    const tweets = await Tweet.find({});
+    if(!tweets){
+        throw new AppError('Something went wrong displaying the tweets', 404)
+    }
+    res.render('tweets/index', {tweets, title: "All Tweets"})
+}))
 
 //DISPLAY A FORM TO CREATE A NEW TWEET
 app.get('/tweets/new', (req, res) => {
@@ -64,69 +67,46 @@ app.get('/tweets/new', (req, res) => {
 })
 
 //ADD A NEW TWEET TO THE SERVER
-app.post('/tweets', async (req, res, next) => {
-    //destructure the payload
-    try{
-        const newTweet = new Tweet(req.body);
-        await newTweet.save();
-        res.redirect('/tweets');
-    } catch (error){
-        next(error)
-    }
-})
+app.post('/tweets', wrapAsync(async (req, res, next) => {
+    const newTweet = new Tweet(req.body);
+    await newTweet.save();
+    res.redirect('/tweets');
+    next(error)
+}))
 
 //VIEW A SINGLE TWEET
-app.get('/tweets/:id', async (req, res, next) => {
-    try {
-        const {id} = req.params;
-        const tweet = await Tweet.findById(id);
-        if(!tweet){
-            throw new AppError('Tweet not found', 404)
-        }
-        res.render('tweets/show', {tweet, title: `${tweet.username}'s tweet`});
-    } catch (error) {
-        next(error)
+app.get('/tweets/:id', wrapAsync(async (req, res, next) => {
+    const {id} = req.params;
+    const tweet = await Tweet.findById(id);
+    if(!tweet){
+        throw new AppError('Tweet not found', 404)
     }
-})
+    res.render('tweets/show', {tweet, title: `${tweet.username}'s tweet`});
+}))
 
 //EDIT A TWEET
-app.get('/tweets/:id/edit', async (req, res) => {
-    try {
-        const {id} = req.params;
-        const tweet = await Tweet.findById(id);
-        if(!tweet){//ejs error
-            throw new AppError('Tweet not found', 404)
-        }
-        res.render('tweets/edit', {tweet,  title: `Edit ${tweet.username}'s tweet`});
-    } catch (error) {
-        next(error)
+app.get('/tweets/:id/edit', wrapAsync(async (req, res) => {
+    const {id} = req.params;
+    const tweet = await Tweet.findById(id);
+    if(!tweet){//ejs error
+        throw new AppError('Tweet not found', 404)
     }
-})
+    res.render('tweets/edit',  {tweet, title: `Editing ${tweet.username}'s tweet`} )
+}))
 
 //UPDATE THE SINGLE TWEET IN SERVER
-app.patch('/tweets/:id', async (req, res) => {
-    try {
-        const {id} = req.params;
-        // console.log(req.body)
-        const tweet = await Tweet.findByIdAndUpdate(id, req.body, {runValidators: true});
-        res.redirect('/tweets')
-        
-    } catch (error) {
-        next(error)
-    }
-})
+app.patch('/tweets/:id', wrapAsync(async (req, res) => {
+    const {id} = req.params;
+    const tweet = await Tweet.findByIdAndUpdate(id, req.body, {runValidators: true});
+    res.redirect('/tweets')
+}))
 
 //DELETE THE TWEET FROM THE SERVER
-app.delete('/tweets/:id', async (req, res) => {
-    try {
-        const {id} = req.params;
-        const tweet = await Tweet.findByIdAndDelete(id);
-        res.redirect('/tweets');
-        
-    } catch (error) {
-        next(error)
-    }
-})
+app.delete('/tweets/:id', wrapAsync(async (req, res) => {
+    const {id} = req.params;
+    const tweet = await Tweet.findByIdAndDelete(id);
+    res.redirect('/tweets');
+}))
 
 //tailored message for validation error from mongoose
 const handleValidationError = err => {

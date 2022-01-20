@@ -39,39 +39,16 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
-//array of tweets to mimic a database
-let tweetsData = [
-    {
-        id: uuid(),
-        username: 'IamMarie',
-        tweet:  'just woke up!'
-    },
-    {
-        id: uuid(),
-        username: 'bob',
-        tweet:  'Cant wait!'
-    },
-    {
-        id: uuid(),
-        username: 'Dan123',
-        tweet:  'I passed!'
-    },
-    {
-        id: uuid(),
-        username: 'mynameis',
-        tweet:  'It is so cold'
-    }
-]
-
 //routes//
 app.get('/', (req, res) => { //homepage
     res.render('tweets/home', {title: "DEFAULT"})
 })
 
 //DISPLAY ALL TWEETS
-app.get('/tweets', (req, res) => {
+app.get('/tweets', async (req, res) => {
     //pass the array of objects
-    res.render('tweets/index', {tweets : tweetsData, title: "All Tweets"})
+    const tweets = await Tweet.find({});
+    res.render('tweets/index', {tweets, title: "All Tweets"})
 })
 
 //DISPLAY A FORM TO CREATE A NEW TWEET
@@ -80,11 +57,16 @@ app.get('/tweets/new', (req, res) => {
 })
 
 //ADD A NEW TWEET TO THE SERVER
-app.post('/tweets', (req, res) => {
+app.post('/tweets', async (req, res) => {
     //destructure the payload
-    const {username, tweet} = req.body;
+    // const {username, tweetText} = req.body;
     //push to the data with a new id
-    tweetsData.push({id : uuid(), username, tweet});
+    const newTweet = new Tweet(req.body);
+    await newTweet.save();
+    
+    console.log(req.body);
+
+    // tweetsData.push({id : uuid(), username, tweetText});
     //redirect to /tweets
     res.redirect('/tweets');
 })

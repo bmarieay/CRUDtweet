@@ -3,8 +3,8 @@
         <main class="container">
             <h1>Editing <%= tweet.username %>'s tweet</h1>
             <form action="/tweets/<%=  tweet.id  %>?_method=PATCH" method="POST">
-                <textarea name="tweet" id="" cols="30" rows="5">
-                    <%= tweet.tweet  %>
+                <textarea name="tweetText" id="" cols="30" rows="5">
+                    <%= tweet.tweetText  %>
                 </textarea>
                 <br>
                 <button class="btn btn-small">Submit</button>

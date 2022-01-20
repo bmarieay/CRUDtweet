@@ -2,8 +2,8 @@
     <%- include('partials/nav') %>
         <main class="container">
             <h1>Viewing <%=  tweet.username  %>'s tweet</h1>
-            <p>Tweet - <%= tweet.tweet %></p>
-            <p>id: <%= tweet.id %></p>
+            <p>Tweet - <%= tweet.tweetText %></p>
+            <p>id: <%= tweet._id %></p>
             <a href="/tweets" class="btn btn-small">Go back to all tweets</a>
             <a href="/tweets/<%= tweet.id %>/edit" class="btn btn-small">Edit</a>
             <form action="/tweets/<%= tweet.id %>?_method=DELETE" method="POST" id="deleteForm">

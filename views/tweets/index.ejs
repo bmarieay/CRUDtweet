@@ -5,7 +5,7 @@
             <ul class="tweet-container">
                 <% for(let tweet of tweets){ %>
                     <li>
-                        <%= tweet.tweet %>  - <b><%= tweet.username %> </b>
+                        <%= tweet.tweetText %>  - <b><%= tweet.username %> </b>
                         <a href="/tweets/<%= tweet.id %>" class="btn btn-small">View</a>
                     </li>
                 <% } %>

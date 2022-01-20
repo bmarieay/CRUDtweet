@@ -5,6 +5,7 @@ const { v4: uuid } = require("uuid");
 const methodOverride = require("method-override");
 uuid();
 const port = 3000;
+const Tweet = require('./models/tweet')
 const mongoose = require("mongoose");
 //initial connection
 mongoose.connect('mongodb://localhost:27017/CrudTweet')
@@ -64,7 +65,7 @@ let tweetsData = [
 
 //routes//
 app.get('/', (req, res) => { //homepage
-    res.render('tweets/home')
+    res.render('tweets/home', {title: "DEFAULT"})
 })
 
 //DISPLAY ALL TWEETS

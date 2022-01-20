@@ -80,26 +80,24 @@ app.get('/tweets/:id', async (req, res) => {
 })
 
 //EDIT A TWEET
-app.get('/tweets/:id/edit', (req, res) => {
+app.get('/tweets/:id/edit', async (req, res) => {
     const {id} = req.params;
-    const matchingTweet = tweetsData.find(tweet => tweet.id === id);
-    res.render('tweets/edit', {tweet : matchingTweet,  title: `Edit ${matchingTweet.username}'s tweet`});
+    const tweet = await Tweet.findById(id);
+    res.render('tweets/edit', {tweet,  title: `Edit ${tweet.username}'s tweet`});
 })
 
 //UPDATE THE SINGLE TWEET IN SERVER
-app.patch('/tweets/:id', (req, res) => {
+app.patch('/tweets/:id', async (req, res) => {
     const {id} = req.params;
-    const matchingTweet = tweetsData.find(tweet => tweet.id === id);
-    //replace the tweet with the tweet payload
-    matchingTweet.tweet = req.body.tweet;
-    //redirect the user to all tweets
+    // console.log(req.body)
+    const tweet = await Tweet.findByIdAndUpdate(id, req.body, {runValidators: true});
     res.redirect('/tweets')
 })
 
 //DELETE THE TWEET FROM THE SERVER
-app.delete('/tweets/:id', (req, res) => {
+app.delete('/tweets/:id', async (req, res) => {
     const {id} = req.params;
-    tweetsData = tweetsData.filter(tweet => tweet.id !== id);
+    const tweet = await Tweet.findByIdAndDelete(id);
     res.redirect('/tweets');
 })
 

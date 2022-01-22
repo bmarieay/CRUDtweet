@@ -5,6 +5,7 @@ const path = require("path")
 const methodOverride = require("method-override");
 // uuid();
 const AppError = require("./utils/AppError")
+const {tweetSchema} = require("./schemas")
 const wrapAsync = require("./utils/wrapAsync")
 const port = 3000;
 const Tweet = require('./models/tweet')
@@ -37,6 +38,17 @@ app.use(methodOverride('_method'));
 // app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
+//server validation middleware
+const validateTweet  = (req, res, next) => {
+    const {error} = tweetSchema.validate(req.body);
+    if(error){
+        const msg = error.details.map(el => el.message).join(',')
+        throw new AppError(msg, 400)
+    } else {
+        next();
+    }
+}
+
 //configure ejs
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
@@ -64,7 +76,8 @@ app.get('/tweets/new', (req, res) => {
 })
 
 //ADD A NEW TWEET TO THE SERVER
-app.post('/tweets', wrapAsync(async (req, res, next) => {
+app.post('/tweets', validateTweet, wrapAsync(async (req, res, next) => {
+    console.log(req.body.tweet)
     const newTweet = new Tweet(req.body.tweet);
     await newTweet.save();
     res.redirect('/tweets');
@@ -91,7 +104,7 @@ app.get('/tweets/:id/edit', wrapAsync(async (req, res) => {
 }))
 
 //UPDATE THE SINGLE TWEET IN SERVER
-app.patch('/tweets/:id', wrapAsync(async (req, res) => {
+app.patch('/tweets/:id', validateTweet, wrapAsync(async (req, res) => {
     const {id} = req.params;
     const tweet = await Tweet.findByIdAndUpdate(id, req.body.tweet, {runValidators: true});
     res.redirect('/tweets')
@@ -106,12 +119,11 @@ app.delete('/tweets/:id', wrapAsync(async (req, res) => {
 
 //tailored message for validation error from mongoose
 const handleValidationError = err => {
-    console.dir(err);
+    // console.dir(err);
     return new AppError(`Validation Failed.....${err.message}`, 400)
 }
 
 app.use((err, req, res, next) => {
-    console.log(err.name)
     if(err.name === 'ValidationError') {
         err = handleValidationError(err);//new error
     }

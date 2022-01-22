@@ -1,5 +1,5 @@
-<%- include('partials/head') %>
-    <%- include('partials/nav') %>
+<%- include('../partials/head') %>
+    <%- include('../partials/nav') %>
         <main class="container">
             <h1>Editing <%= tweet.username %>'s tweet</h1>
             <form action="/tweets/<%=  tweet.id  %>?_method=PATCH" method="POST">
@@ -9,4 +9,4 @@
             </form>
             <a href="/tweets/<%= tweet.id  %>" class="btn btn-small" id="cancelButton">Cancel</a>
         </main>
-<%- include('partials/footer') %>
+<%- include('../partials/footer') %>

@@ -10,3 +10,20 @@ module.exports.tweetSchema = Joi.object({
         .required()
     }).required()
 })
+
+
+module.exports.userSchema = Joi.object({
+    user: Joi.object({
+        username: Joi.string()
+            .min(3)
+            .max(10)
+            .required(),
+        age: Joi.number()
+            .min(10)
+            .max(90)
+            .required(),
+        city: Joi.string()
+            .required()
+    }).required()
+})
+

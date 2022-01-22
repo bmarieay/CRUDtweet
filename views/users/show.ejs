@@ -1,0 +1,13 @@
+<%- include('../partials/head') %>
+    <%- include('../partials/nav') %>
+        <main class="container">
+            <h1>Viewing <%=  user.username  %>'s Profile</h1>
+            <p>Age - <%= user.age %></p>
+            <p>From - <%= user.city %></p>
+            <a href="/user" class="btn btn-small">Go back to all Users</a>
+            <a href="/user/<%= user.id %>/edit" class="btn btn-small">Edit</a>
+            <form action="/user/<%= user._id %>?_method=DELETE" method="POST" id="deleteForm">
+                <button id="deleteButton" class="btn btn-small">Delete</button>
+            </form>
+    </main>
+<%- include('../partials/footer') %>

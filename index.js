@@ -5,11 +5,13 @@ const path = require("path")
 const methodOverride = require("method-override");
 // uuid();
 const AppError = require("./utils/AppError")
-const {tweetSchema} = require("./schemas")
+const {tweetSchema, userSchema} = require("./schemas")
 const wrapAsync = require("./utils/wrapAsync")
 const port = 3000;
 const Tweet = require('./models/tweet')
+const User = require('./models/user')
 const mongoose = require("mongoose");
+const e = require("express");
 //initial connection
 mongoose.connect('mongodb://localhost:27017/CrudTweet')
     .then(() => {
@@ -48,6 +50,15 @@ const validateTweet  = (req, res, next) => {
         next();
     }
 }
+const validateUser  = (req, res, next) => {
+    const {error} = tweetSchema.validate(req.body);
+    if(error){
+        const msg = error.details.map(el => el.message).join(',')
+        throw new AppError(msg, 400)
+    } else {
+        next();
+    }
+}
 
 //configure ejs
 app.set('view engine', 'ejs');
@@ -57,6 +68,37 @@ app.set('views', path.join(__dirname, 'views'))
 app.get('/', (req, res) => { //homepage
     res.render('tweets/home', {title: "DEFAULT"})
 })
+
+
+
+//create a new user
+app.get('/user', async (req, res) => {
+    const users = await User.find({});
+    res.render('users/index', {users, title: 'All Users'})
+})
+
+
+app.get('/user/new', (req, res) => {
+    res.render('users/create', {title: 'Create new User'})
+})
+
+app.post('/user', wrapAsync(async(req, res) => {
+    const user = await new User(req.body.user);
+    await user.save();
+    res.send('HEYYYYY')
+}))
+
+app.get('/user/:id', wrapAsync(async(req, res) => {
+    const {id} = req.params;
+    //populate later
+    const user = await User.findById(id)
+    console.log(user)
+        // .populate('tweets')
+    // res.render('users/show', {user, title: `${user.username}'s Profile` })
+}))
+
+
+
 
 
 
@@ -117,6 +159,11 @@ app.delete('/tweets/:id', wrapAsync(async (req, res) => {
     res.redirect('/tweets');
 }))
 
+app.all('*', (req, res, next) => {
+    next(new AppError('Page Not Found', 404));
+})
+
+
 //tailored message for validation error from mongoose
 const handleValidationError = err => {
     // console.dir(err);
@@ -143,3 +190,5 @@ app.use((err, req, res, next) => {//this will catch either custom error or not
 app.listen(3000, (req, res) => {
     console.log(`Listening to port ${port}`)
 })
+
+

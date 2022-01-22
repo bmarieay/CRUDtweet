@@ -1,0 +1,13 @@
+body{
+    letter-spacing: 2px;
+}
+.error--container h1{
+    color: #740b0b;
+}
+
+#error_detail{
+    color: #74320b;
+}
+#error_status{
+    color: #504b01;
+}

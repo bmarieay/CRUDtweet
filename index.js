@@ -107,7 +107,7 @@ app.delete('/tweets/:id', wrapAsync(async (req, res) => {
 //tailored message for validation error from mongoose
 const handleValidationError = err => {
     console.dir(err);
-    return new AppError(`Validation Failed.....${err.message}', 400`)
+    return new AppError(`Validation Failed.....${err.message}`, 400)
 }
 
 app.use((err, req, res, next) => {
@@ -122,8 +122,9 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {//this will catch either custom error or not
     console.log('ERRRRORRRRR')
     //set a default status and message
-    const {message = 'Something went wrong :(', status = 500} = err;
-    res.status(status).send(`Sorry you got an error message: ${err.message} with a status ${status}`);
+    const {status = 500} = err;
+    if(!err.message) err.message = 'Something went wrong :('
+    res.status(status).render('error', {err})
 })
 
 //=====

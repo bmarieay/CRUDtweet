@@ -4,7 +4,8 @@ const path = require("path")
 // const { v4: uuid } = require("uuid");
 const methodOverride = require("method-override");
 // uuid();
-const AppError = require("./AppError/AppError")
+const AppError = require("./utils/AppError")
+const wrapAsync = require("./utils/wrapAsync")
 const port = 3000;
 const Tweet = require('./models/tweet')
 const mongoose = require("mongoose");
@@ -45,11 +46,7 @@ app.get('/', (req, res) => { //homepage
     res.render('tweets/home', {title: "DEFAULT"})
 })
 
-function wrapAsync(fn){
-    return function(req, res, next){
-        fn(req, res, next).catch(e => next(e));//catch errors thrown by mongoose or by AppError
-    }
-}
+
 
 
 //DISPLAY ALL TWEETS

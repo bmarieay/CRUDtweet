@@ -6,7 +6,7 @@ const TweetSchema = new Schema({
         type: String,
         required: [true, 'Username is required' ]
     },
-    tweetText: {
+    text: {
         type: String,
         required: [true, 'Cannot submit a blank tweet']
     }

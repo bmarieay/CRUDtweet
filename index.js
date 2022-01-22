@@ -65,10 +65,9 @@ app.get('/tweets/new', (req, res) => {
 
 //ADD A NEW TWEET TO THE SERVER
 app.post('/tweets', wrapAsync(async (req, res, next) => {
-    const newTweet = new Tweet(req.body);
+    const newTweet = new Tweet(req.body.tweet);
     await newTweet.save();
     res.redirect('/tweets');
-    next(error)
 }))
 
 //VIEW A SINGLE TWEET
@@ -94,7 +93,7 @@ app.get('/tweets/:id/edit', wrapAsync(async (req, res) => {
 //UPDATE THE SINGLE TWEET IN SERVER
 app.patch('/tweets/:id', wrapAsync(async (req, res) => {
     const {id} = req.params;
-    const tweet = await Tweet.findByIdAndUpdate(id, req.body, {runValidators: true});
+    const tweet = await Tweet.findByIdAndUpdate(id, req.body.tweet, {runValidators: true});
     res.redirect('/tweets')
 }))
 

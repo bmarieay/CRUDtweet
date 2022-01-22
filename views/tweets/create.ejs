@@ -5,12 +5,12 @@
             <form action="/tweets" method="POST">
                 <section>
                     <label for="username">Enter your username</label>
-                    <input type="text" name="tweet[username]" id="username" placeholer="username">
+                    <input type="text" name="tweet[username]" id="username" placeholer="username" required>
                 </section>
                 <section>
                     <label for="tweetText">Enter your tweet</label>
                     <br>
-                    <textarea name="tweet[text]" id="tweetText" cols="30" rows="5"></textarea>
+                    <textarea name="tweet[text]" id="tweetText" cols="30" rows="5" required></textarea>
                 </section>
                 <button class="btn-small btn">Create Tweet</button>
             </form>

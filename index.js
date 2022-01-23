@@ -209,6 +209,7 @@ app.patch('/tweets/:id', validateTweet, wrapAsync(async (req, res) => {
 app.delete('/tweets/:id', wrapAsync(async (req, res) => {
     const {id} = req.params;
     const tweet = await Tweet.findByIdAndDelete(id);
+    const user = await User.findOneAndUpdate({id: tweet.user}, { $pull: { tweets: tweet._id } } )
     res.redirect('/tweets');
 }))
 
@@ -217,7 +218,7 @@ app.delete('/tweets/:id', wrapAsync(async (req, res) => {
 app.all('*', (req, res, next) => {
     next(new AppError('Page Not Found', 404));
 })
-
+// User.updateOne({}, {pull: {tweets: {_id: '61edcfa42afd11f874596dc8'}}}).then(m => console.log(m)) 
 //tailored message for validation error from mongoose
 const handleValidationError = err => {
     // console.dir(err);

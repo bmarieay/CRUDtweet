@@ -4,8 +4,15 @@
             <h1>Viewing <%=  user.username  %>'s Profile</h1>
             <p>Age - <%= user.age %></p>
             <p>From - <%= user.city %></p>
+            <section>
+                <h2><%= user.username %> Tweets</h2>
+                <% for(let tweet of user.tweets){ %>
+                        <li><%= tweet.text %> </li>
+                <% } %>
+            </section>
             <a href="/user" class="btn btn-small">Go back to all Users</a>
-            <a href="/user/<%= user.id %>/edit" class="btn btn-small">Edit</a>
+            <a href="/user/<%= user._id %>/edit" class="btn btn-small">Edit</a>
+            <a href="/user/<%= user._id %>/tweets/new " class="btn btn-med">Create a new tweet</a>
             <form action="/user/<%= user._id %>?_method=DELETE" method="POST" id="deleteForm">
                 <button id="deleteButton" class="btn btn-small">Delete</button>
             </form>

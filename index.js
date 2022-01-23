@@ -8,6 +8,7 @@ const AppError = require("./utils/AppError")
 const {tweetSchema, userSchema} = require("./schemas")
 const wrapAsync = require("./utils/wrapAsync")
 const port = 3000;
+const Joi = require('joi')
 const Tweet = require('./models/tweet')
 const User = require('./models/user')
 const mongoose = require("mongoose");
@@ -51,7 +52,7 @@ const validateTweet  = (req, res, next) => {
     }
 }
 const validateUser  = (req, res, next) => {
-    const {error} = tweetSchema.validate(req.body);
+    const {error} = userSchema.validate(req.body);
     if(error){
         const msg = error.details.map(el => el.message).join(',')
         throw new AppError(msg, 400)
@@ -69,7 +70,7 @@ app.get('/', (req, res) => { //homepage
     res.render('tweets/home', {title: "DEFAULT"})
 })
 
-
+//USER ROUTES
 
 //create a new user
 app.get('/user', async (req, res) => {
@@ -77,62 +78,114 @@ app.get('/user', async (req, res) => {
     res.render('users/index', {users, title: 'All Users'})
 })
 
-
+//form to create a user
 app.get('/user/new', (req, res) => {
     res.render('users/create', {title: 'Create new User'})
 })
 
-app.post('/user', wrapAsync(async(req, res) => {
+//add user to the server
+app.post('/user', validateUser, wrapAsync(async(req, res) => {
     const user = await new User(req.body.user);
     await user.save();
-    res.send('HEYYYYY')
+    res.redirect(`/user/${user._id}`)
 }))
 
+//show single user
 app.get('/user/:id', wrapAsync(async(req, res) => {
     const {id} = req.params;
-    //populate later
+    //populate to show corresponding reviews of user
     const user = await User.findById(id)
-    console.log(user)
-        // .populate('tweets')
-    // res.render('users/show', {user, title: `${user.username}'s Profile` })
+    .populate('tweets')
+    if(!user) throw new AppError('Cannot find profile', 404);
+    res.render('users/show', {user, title: `${user.username}'s Profile` })
 }))
 
+//edit a user profile
+app.get('/user/:id/edit', wrapAsync(async(req, res) => {
+    const {id} = req.params;
+    const user = await User.findById(id)
+    if(!user) throw new AppError('Cannot find profile', 404);
+    res.render('users/edit', {user, title: `Edit ${user.username}'s Profile`})
+}))
 
+//update user profile
+app.patch('/user/:id', validateUser, wrapAsync(async(req, res) => {
+    const {id} = req.params;
+    const user = await User.findByIdAndUpdate(id, {...req.body.user})
+    if(!user) throw new AppError('Cannot find profile', 404);
+    res.redirect(`/user/${user._id}`)
+}))
 
+//form to create a new tweet from user profile
+app.get('/user/:id/tweets/new', wrapAsync(async(req, res) => {
+    const {id} = req.params;
+    const user = await User.findById(id);
+    if(!user){
+        throw new AppError('Associated user not found', 404)
+    } 
+    res.render('users/newTweet', {user, title: `Create comment from ${user.username}`})
+}))
 
+//add tweet from user to the server
+app.post('/user/:id/tweets', wrapAsync(async(req, res) => {
+    const {id} = req.params;
+    const {username} = req.body.tweet;
+    const user = await User.findById(id);
+    if((!user) || (username !== user.username) ){
+        throw new AppError('Associated user not found', 404)
+    } 
+    const newTweet = new Tweet(req.body.tweet);
+    user.tweets.push(newTweet)
+    newTweet.user = user;
+    await newTweet.save();
+    await user.save();
+    res.redirect(`/user/${user._id}`);
+}))
 
-
+//TWEET ROUTES
 
 //DISPLAY ALL TWEETS
 app.get('/tweets', wrapAsync(async (req, res, next) => {
-    const tweets = await Tweet.find({});
+    const tweets = await Tweet.find({})
+        .populate('user')
     if(!tweets){
         throw new AppError('Something went wrong displaying the tweets', 404)
     }
     res.render('tweets/index', {tweets, title: "All Tweets"})
 }))
 
-//DISPLAY A FORM TO CREATE A NEW TWEET
-app.get('/tweets/new', (req, res) => {
-    res.render('tweets/create', {title: "New Tweet"});
+//form to create a new tweet from tweet home
+app.get('/tweets/new', async(req, res) => {
+    res.render('tweets/create', {title: 'Create a New Tweet'});
 })
 
-//ADD A NEW TWEET TO THE SERVER
+//add a new tweet to the server
 app.post('/tweets', validateTweet, wrapAsync(async (req, res, next) => {
-    console.log(req.body.tweet)
+    //check if there is a matching user in the database
+    const {username} = req.body.tweet;
+    const user = await User.findOne({username})
+    if(!user){
+        throw new AppError('No profile found, please create a user first', 401)
+    } 
+    // const confirmedUser = await User.findById(user._id);
     const newTweet = new Tweet(req.body.tweet);
+    //bind the user and tweet together
+    user.tweets.push(newTweet)
+    newTweet.user = user;
     await newTweet.save();
+    await user.save();
     res.redirect('/tweets');
 }))
 
 //VIEW A SINGLE TWEET
 app.get('/tweets/:id', wrapAsync(async (req, res, next) => {
     const {id} = req.params;
-    const tweet = await Tweet.findById(id);
+    const tweet = await Tweet.findById(id)
+        .populate('user')
     if(!tweet){
         throw new AppError('Tweet not found', 404)
     }
-    res.render('tweets/show', {tweet, title: `${tweet.username}'s tweet`});
+    res.render('tweets/show', {tweet, title: `${tweet.user.username}'s tweet`});
 }))
 
 //EDIT A TWEET
@@ -159,10 +212,11 @@ app.delete('/tweets/:id', wrapAsync(async (req, res) => {
     res.redirect('/tweets');
 }))
 
+
+//404 route
 app.all('*', (req, res, next) => {
     next(new AppError('Page Not Found', 404));
 })
-
 
 //tailored message for validation error from mongoose
 const handleValidationError = err => {
@@ -192,3 +246,5 @@ app.listen(3000, (req, res) => {
 })
 
 
+//post /user/:userid/tweets -add tweet to the server
+//get /user/:userid/tweets/new -create new tweet dont need

@@ -5,11 +5,12 @@
             <ul class="tweet-container">
                 <% for(let tweet of tweets){ %>
                     <li>
-                        <%= tweet.text %>  - <b><%= tweet.username %> </b>
+                        <%= tweet.text %>  - <b><%= tweet.user.username %> </b>
                         <a href="/tweets/<%= tweet.id %>" class="btn btn-small">View</a>
                     </li>
                 <% } %>
             </ul>
             <a href="/tweets/new" class="btn btn-med">Create a new tweet</a>
         </main>
+        <a href="/user" class="btn btn-med">View User Profiles</a>
 <%- include('../partials/footer') %>

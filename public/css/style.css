@@ -31,6 +31,10 @@ body{
     color: var(--light-clr);
 }
 
+section {
+    margin-bottom: 2rem;
+}
+
 #nav{
     padding: 1.5rem;
     font-size: var(--fs-large);

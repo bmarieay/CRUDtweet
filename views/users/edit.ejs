@@ -1,0 +1,14 @@
+<%- include('../partials/head') %>
+    <%- include('../partials/nav') %>
+        <main class="container">
+            <h1>Editing <%= user.username %>'s Profile</h1>
+            <form action="/user/<%=  user._id  %>?_method=PATCH" method="POST">
+                <label for="username">New Username:</label>
+                <input type="text" name="user[username]" id="username" placeholder="<%= user.username %> "required>
+                <label for="city">City: </label>
+                <input type="text" name="user[city]" id="city" placeholder="<%= user.city %> "required>
+                <button class="btn btn-small">Submit</button>
+            </form>
+            <a href="/user/<%= user.id  %>" class="btn btn-small" id="cancelButton">Cancel</a>
+        </main>
+<%- include('../partials/footer') %>

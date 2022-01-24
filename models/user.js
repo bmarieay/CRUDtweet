@@ -13,4 +13,14 @@ const UserSchema = new Schema({
     ]
 })
 
+UserSchema.post('findOneAndDelete', async function (user) {
+    if(user){
+        await Tweet.deleteMany({
+            _id: {
+                $in: user.tweets
+            }
+        })
+    }
+})
+
 module.exports = mongoose.model('User', UserSchema);

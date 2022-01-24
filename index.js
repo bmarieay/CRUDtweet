@@ -142,6 +142,12 @@ app.post('/user/:id/tweets', wrapAsync(async(req, res) => {
     res.redirect(`/user/${user._id}`);
 }))
 
+app.delete('/user/:id', wrapAsync(async(req, res) => {
+    const {id} = req.params;
+    await User.findByIdAndDelete(id);
+    res.redirect('/user');
+}))
+
 //TWEET ROUTES
 
 //DISPLAY ALL TWEETS
@@ -151,6 +157,7 @@ app.get('/tweets', wrapAsync(async (req, res, next) => {
     if(!tweets){
         throw new AppError('Something went wrong displaying the tweets', 404)
     }
+    // res.send(tweets)
     res.render('tweets/index', {tweets, title: "All Tweets"})
 }))
 
